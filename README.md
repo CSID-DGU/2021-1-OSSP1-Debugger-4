@@ -1,6 +1,4 @@
-tensorflow version 1.x, 
-
-결과 평가를 위한 fid score 도출 오픈소스
+결과 평가를 위한 fid score 오픈소스
 ver1 : https://machinelearningmastery.com/how-to-implement-the-frechet-inception-distance-fid-from-scratch/
 
 ver2 : 
