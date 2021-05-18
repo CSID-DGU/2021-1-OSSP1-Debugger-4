@@ -2,6 +2,7 @@ tensorflow version 1.x,
 
 결과 평가를 위한 fid score 도출 오픈소스
 ver1 : https://machinelearningmastery.com/how-to-implement-the-frechet-inception-distance-fid-from-scratch/
+
 ver2 : 
 
 ![1_tJmwViZesuFM89TcVN7J3A](https://user-images.githubusercontent.com/68414594/117540393-2c2ac100-b04a-11eb-81b5-fb2e626fa04b.png)
