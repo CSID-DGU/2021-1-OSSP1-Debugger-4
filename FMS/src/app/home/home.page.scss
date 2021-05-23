@@ -1,0 +1,29 @@
+#container {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 30px;
+  line-height: 26px;
+  color :black;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: rgb(10, 25, 92);
+
+  margin: 0;
+}
+
+#container a {
+  font-size: 13px;
+  color : black;
+}
