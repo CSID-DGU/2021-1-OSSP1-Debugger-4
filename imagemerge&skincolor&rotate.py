@@ -67,8 +67,89 @@ def extractMask(landmark, img):
   result = result[nose:bottom, side1:side2] # crop ROI
   return result
 
-
-
+# 사람 피부색 영역에 해당하는 마스크를 통해 두 사진에서 얼굴의 색 평균값 추출 이후, 해당 값의 차이만큼 bgr 조정
+def coloring(img1, img2):
+    img1_ycrcb = cv2.cvtColor(img1, cv2.COLOR_BGR2YCrCb)
+    img2_ycrcb = cv2.cvtColor(img2, cv2.COLOR_BGR2YCrCb)
+    lower = np.array([0,133,77], dtype = np.unit8)
+    upper = np.array([255,173,127], dtype = np.unit8)
+    mask1 = cv2.inRange(img1_ycrcb, lower, upper)
+    mask2 = cv2.inRange(img2_ycrcb, lower, upper)
+    skin1 = cv2.bitwise_and(img1, img1, mask = mask1)
+    skin2 = cv2.bitwise_and(img2, img2, mask = mask2)
+    
+    height1, width1, channel1 = skin1.shape
+    tmp = 0
+    black = 0
+    b1 = 0
+    g1 = 0
+    r1 = 0
+    
+    for y in range(0, height1):
+        for x in range(0, width1):
+            b = skin1.item(y,x,0)
+            g = skin1.item(y,x,1)
+            r = skin1.item(y,x,2)
+            
+            if(b==0 and g==0 and r== 0):
+                black +=1
+            else:
+                tmp = +=1
+            b1 = b1 + b
+            g1 = g1 + g
+            r1 = r1 +r
+    height2, width2, channel2 = skin1.shape
+    tmp2 = 0
+    b2 = 0
+    g2 = 0
+    r2 = 0
+    
+    for y in range(0, height2):
+        for x in range(0, width2):
+            b = skin2.item(y,x,0)
+            g = skin2.item(y,x,1)
+            r = skin2.item(y,x,2)
+            
+            if(b==0 and g==0 and r== 0):
+                black +=1
+            else:
+                tmp2 = +=1
+            b2 = b2 + b
+            g2 = g2 + g
+            r2 = r2 + r
+     
+    red = r1/tmp - r2/tmp2
+    green = g1/tmp - g2/tmp2
+    blue = b1/tmp - b2/tmp2
+    
+    red2 = red
+    green2 = green
+    blue2 = blue
+    
+    if(red<0):
+        red2 = red*-1
+        red = 0
+    if(green<0):
+        green2 = green*-1
+        green = 0
+    if(blue<0):
+        blue2 = blue*-1
+        blue = 0
+    if(red>0)
+        red2 = 0
+    if(green<0):
+        green2 = 0
+    if(blue<0):
+        blue2 = 0
+   
+    
+    array1 = np.full(img1.shape, (blue, green, red), dtype = np.unit8)
+    array2 = np.full(img1.shape, (blue2, green2, red2), dtype = np.unit8)
+    img1 = cv2.add(img1, array1)
+    img1 = cv2.subtract(img1, array2)
+    return img1
+  
+    
 # 두 이미지 합하기, img_mask : 마스크부분만 자른 이미지, img : 마스크낀 이미지 landmark_1 : 마스크를 낀 사진의 landmark, landmark2 : 마스크를 안낀 사진의 landmark
 def func(hpos, vpos, img_mask, img, landmark_1, landmark_2):
   x1 = landmark_1[36][0] - landmark_1[45][0]
@@ -115,7 +196,9 @@ landmark1 = faceDetection(image, detector, predictor)
 landmark2 = faceDetection(image2, detector, predictor)
 
 show_mask = extractMask(landmark2, image2)
+new_mask = coloring(show_mask, image)
 #cv2_imshow(show_mask)
 
-merged_img = func(landmark1[27][1],landmark1[0][0], show_mask, image, landmark1, landmark2)
+merged_img = func(landmark1[27][1],landmark1[0][0], new_mask, image, landmark1, landmark2)
 cv2_imshow(merged_img)
+    
