@@ -15,7 +15,7 @@ import dlib
 import cv2
 import math
 
-
+dx = 0
 # 얼굴 Detection 및 Landmark 생성
 def faceDetection(img, detector, predictor):
   #h, w, ch = img.shape
@@ -71,13 +71,14 @@ def extractMask(landmark, img):
 def coloring(img1, img2):
     img1_ycrcb = cv2.cvtColor(img1, cv2.COLOR_BGR2YCrCb)
     img2_ycrcb = cv2.cvtColor(img2, cv2.COLOR_BGR2YCrCb)
-    lower = np.array([0,133,77], dtype = np.unit8)
-    upper = np.array([255,173,127], dtype = np.unit8)
+    lower = np.array([0,133,77], dtype = np.uint8)
+    upper = np.array([255,173,127], dtype = np.uint8)
     mask1 = cv2.inRange(img1_ycrcb, lower, upper)
     mask2 = cv2.inRange(img2_ycrcb, lower, upper)
     skin1 = cv2.bitwise_and(img1, img1, mask = mask1)
     skin2 = cv2.bitwise_and(img2, img2, mask = mask2)
-    
+    cv2_imshow(skin1)
+    cv2_imshow(skin2)
     height1, width1, channel1 = skin1.shape
     tmp = 0
     black = 0
@@ -94,11 +95,12 @@ def coloring(img1, img2):
             if(b==0 and g==0 and r== 0):
                 black +=1
             else:
-                tmp = +=1
+                tmp +=1
             b1 = b1 + b
             g1 = g1 + g
             r1 = r1 +r
-    height2, width2, channel2 = skin1.shape
+
+    height2, width2, channel2 = skin2.shape
     tmp2 = 0
     b2 = 0
     g2 = 0
@@ -110,45 +112,53 @@ def coloring(img1, img2):
             g = skin2.item(y,x,1)
             r = skin2.item(y,x,2)
             
-            if(b==0 and g==0 and r== 0):
+            if(b==0 or g==0 or r== 0):
                 black +=1
             else:
-                tmp2 = +=1
+                tmp2  +=1
             b2 = b2 + b
             g2 = g2 + g
             r2 = r2 + r
      
-    red = r1/tmp - r2/tmp2
-    green = g1/tmp - g2/tmp2
-    blue = b1/tmp - b2/tmp2
-    
-    red2 = red
-    green2 = green
-    blue2 = blue
-    
-    if(red<0):
-        red2 = red*-1
-        red = 0
-    if(green<0):
-        green2 = green*-1
-        green = 0
-    if(blue<0):
-        blue2 = blue*-1
-        blue = 0
-    if(red>0)
-        red2 = 0
-    if(green<0):
-        green2 = 0
-    if(blue<0):
-        blue2 = 0
+    red =  r2/tmp2 -r1/tmp
+    green = g2/tmp2 - g1/tmp
+    blue = b2/tmp2 - b1/tmp
    
-    
-    array1 = np.full(img1.shape, (blue, green, red), dtype = np.unit8)
-    array2 = np.full(img1.shape, (blue2, green2, red2), dtype = np.unit8)
-    img1 = cv2.add(img1, array1)
-    img1 = cv2.subtract(img1, array2)
+    val = min(abs(red), abs(green), abs(blue))
+    if(val == -red or val == -blue or val == -green):
+        val = val * -1
+
+    if(val>0):    
+      array = np.full(img1.shape, (val, val, val), dtype = np.uint8)
+      img1 = cv2.add(img1, array)
+    else:
+      array = np.full(img1.shape, (-val, -val, -val), dtype = np.uint8)
+      img1 = cv2.subtract(img1, array)
     return img1
-  
+
+#def rotate(img,x1,y1,x2,y2):
+#  x, y, c = img.shape
+#  c = math.sqrt((x1**2)+(y1**2))
+#  c2 = math.sqrt((x2**2)+(y2**2))
+
+#  if(c2>c):
+#   d = c2-c
+#    tan1 = np.arctan2(d, c2)
+#    angle = np.rad2deg(tan1) * -1/2
+#  else :
+#    d = c-c2
+#    tan1 = np.arctan2(d, c) 
+#    angle = np.rad2deg(tan1)/2
+#  if(angle>0):
+#    dx = int(d/4)
+#  else:
+#    dx = int(-d/4)
+#  print(dx)
+#  cp = (img.shape[1]/2, img.shape[0]/2)
+#  rot = cv2.getRotationMatrix2D(cp, angle,1)
+#  img = cv2.warpAffine(img, rot, (0, 0)) 
+#  cv2_imshow(img)
+#  return img
     
 # 두 이미지 합하기, img_mask : 마스크부분만 자른 이미지, img : 마스크낀 이미지 landmark_1 : 마스크를 낀 사진의 landmark, landmark2 : 마스크를 안낀 사진의 landmark
 def func(hpos, vpos, img_mask, img, landmark_1, landmark_2):
@@ -159,13 +169,14 @@ def func(hpos, vpos, img_mask, img, landmark_1, landmark_2):
   x2 = landmark_2[36][0] - landmark_2[45][0]
   y2 = landmark_2[36][1] - landmark_2[45][1]
   c2 = math.sqrt((x2**2)+(y2**2))
-
-  size = c/c2
+  print(c2, c)
+  print(dx)
+  size = c2/c
 
   src = img_mask
   src = cv2.resize(src, dsize=(0,0), fx =size, fy= size, interpolation = cv2.INTER_LINEAR)
   rows, cols, channels = src.shape
-  roi = img[hpos:rows+hpos,vpos:cols+vpos]
+  roi = img[hpos:rows+hpos,vpos-8:cols+vpos-8]
 
   gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
   ret, mask = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
@@ -173,6 +184,7 @@ def func(hpos, vpos, img_mask, img, landmark_1, landmark_2):
 
   img_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
   src_fg = cv2.bitwise_and(src, src, mask=mask)
+  src_fg = coloring(src_fg, img_bg)
 
   tmp = cv2.add(img_bg, src_fg)
   img[hpos:rows+hpos, vpos:cols+vpos] = tmp
@@ -180,13 +192,13 @@ def func(hpos, vpos, img_mask, img, landmark_1, landmark_2):
 
 
 detector = dlib.get_frontal_face_detector()
-pred = "./shape_predictor_68_face_landmarks.dat"
+pred = "/gdrive/MyDrive/shape_predictor_68_face_landmarks.dat"
 predictor = dlib.shape_predictor(pred)
 
-img_path = "./input_img.jpg"  #마스크 낀 사진
+img_path = "/gdrive/MyDrive/face1.jpg"  #마스크 낀 사진
 image = cv2.imread(img_path)
 
-img_path2 = "./input_img2.jpg"  #마스크 안낀 사진
+img_path2 = "/gdrive/MyDrive/face2.jpg"  #마스크 안낀 사진
 image2 = cv2.imread(img_path2)
 
 landmark1 = np.empty((68,2),int)
@@ -195,10 +207,11 @@ landmark2 = np.empty((68,2),int)
 landmark1 = faceDetection(image, detector, predictor)
 landmark2 = faceDetection(image2, detector, predictor)
 
-show_mask = extractMask(landmark2, image2)
-new_mask = coloring(show_mask, image)
-#cv2_imshow(show_mask)
+show_mask = extractMask(landmark1, image)
+cv2_imshow(show_mask)
+#show_mask = rotate(show_mask, landmark1[36][0] - landmark1[45][0],landmark1[36][1] - landmark1[45][1], landmark2[36][0] - landmark2[45][0], landmark2[36][1] - landmark2[45][1])
+cv2_imshow(show_mask)
 
-merged_img = func(landmark1[27][1],landmark1[0][0], new_mask, image, landmark1, landmark2)
+merged_img = func(landmark2[27][1],landmark2[0][0], show_mask, image2, landmark1, landmark2)
 cv2_imshow(merged_img)
     
