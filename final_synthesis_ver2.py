@@ -262,6 +262,24 @@ def func(hpos, vpos, img_mask, img, landmark_1, landmark_2, handle):
   '''
   return img, tmp
 
+
+def output(img):
+    detector = dlib.get_frontal_face_detector()
+    image = img
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    rects = detector(gray, 1)
+    for i in rects:
+        x1 = i.left()
+        x2 = i.right()
+        y1 = i.top()
+        y2 = i.bottom()
+    tmp = image[y1:y2, x1:x2]
+    tmp = cv2.resize(tmp, dsize=(800, 9--), interpolation=cv2.INTER_AREA)
+    cv2_imshow(tmp)
+    return tmp 
+
+
+#2차 합성
 def replace(img, eimg):
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
   rects = detector(img, 1)
