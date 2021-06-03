@@ -216,6 +216,8 @@ def func(hpos, vpos, img_mask, img, landmark_1, landmark_2, handle):
   img_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
   src_fg = cv2.bitwise_and(src, src, mask=mask_s)
   tmp = cv2.addWeighted(img_bg, 1, src_fg, 1,0)
+  tmp=cv2.medianBlur(tmp,9)
+
   if handle == "right":
     img[hpos:rows+hpos, vpos:cols+vpos] = tmp
   else:
@@ -270,7 +272,6 @@ image2 = coloring(image,image2,landmark1,landmark2)
 show_mask = extractMask(landmark2, image2)
 show_mask,r = rotate(show_mask, landmark1[36],landmark1[45],landmark2[36], landmark2[45])
 
-tmp=cv2.medianBlur(tmp,9)
 
 if(r == "right"):
   merged_img, show_mask = func(landmark1[40][1],landmark1[0][0], show_mask, image, landmark1, landmark2, r)
