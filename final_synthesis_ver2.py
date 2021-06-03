@@ -313,17 +313,3 @@ img_encoded = cv2.imread("/content/gdrive/MyDrive/opencv/encode.jpg")
 merged_img = replace(merged_img, img_encoded)
 cv2_imshow(merged_img)
 cv2.imwrite("./gdrive/MyDrive/opencv/result.png",merged_img)
-
-result_img = cv2.imread("./gdrive/MyDrive/opencv/result.png")
-gray = cv2.cvtColor(result_img, cv2.COLOR_BGR2GRAY)
-rects = detector(gray,1)
-roi = rects[0]
-(x, y, w, h) = face_utils.rect_to_bb(roi)
-shape = predictor(gray, roi)
-shape = face_utils.shape_to_np(shape)
-for i in shape:
-  cv2.circle(result_img,tuple(i),1,0,2)
-cv2_imshow(result_img)
-result_img = result_img[y:y+h,x:x+w]
-result_img = cv2.resize(result_img,(800,800))
-cv2_imshow(result_img)
