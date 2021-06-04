@@ -1,0 +1,275 @@
+from imutils import face_utils
+import numpy as np
+import imutils
+import dlib
+import cv2
+import math
+
+
+# 얼굴 Detection 및 Landmark 생성
+def faceDetection(img, detector, predictor):
+  #h, w, ch = img.shape
+  gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+  rects = detector(gray,1)
+  roi = rects[0]
+  shape = predictor(gray, roi)
+  shape = face_utils.shape_to_np(shape)
+  return shape
+
+
+#마스크부분 추출
+def extractMask(landmark, img):
+  h, w, ch = img.shape
+  # extract jawline
+  jawline = landmark[0:17]
+  temp_face = landmark[1:16]
+  lefteye = landmark[36:42]
+  righteye = landmark[42:48]
+
+  nose = landmark[27][1]
+
+  top = nose
+  bottom = max(jawline[:,1])
+  side1 = min(jawline[:,0])
+  side2 = max(jawline[:,0])
+  side = side2-side1
+
+  lefteyeline = max(lefteye[:,1])
+  righteyeline = max(righteye[:,1])
+
+  temp_face = np.insert(temp_face,0,[landmark[0][0],landmark[40][1]]).reshape(-1,2)
+  temp_face = np.append(temp_face,[landmark[16][0],landmark[47][1]]).reshape(-1,2)
+  # extend contour for masking
+  jawline = np.append(jawline, [landmark[47][0],landmark[47][1]]).reshape(-1,2)
+  temp_face = np.append(temp_face, [landmark[47][0],landmark[47][1]]).reshape(-1,2)
+  jawline = np.append(jawline, [landmark[27][0],landmark[27][1]]).reshape(-1,2)
+  temp_face = np.append(temp_face, [landmark[27][0],landmark[27][1]]).reshape(-1,2)
+  jawline = np.append(jawline, [ w-1, nose]).reshape(-1,2)
+  temp_face = np.append(temp_face, [w-1,nose]).reshape(-1,2)
+  jawline = np.append(jawline, [ w-1, h-1 ]).reshape(-1, 2)
+  temp_face = np.append(temp_face,[w-1,h-1]).reshape(-1,2)
+  jawline = np.append(jawline, [ 0, h-1 ]).reshape(-1, 2)
+  temp_face = np.append(temp_face,[0,h-1]).reshape(-1,2)
+  jawline = np.append(jawline, [0, nose]).reshape(-1,2)
+  temp_face = np.append(temp_face,[0,nose]).reshape(-1,2)
+  jawline = np.append(jawline, [landmark[27][0],landmark[27][1]]).reshape(-1,2)
+  temp_face = np.append(temp_face,[landmark[27][0],landmark[27][1]]).reshape(-1,2)
+  jawline = np.append(jawline, [landmark[40][0],landmark[40][1]]).reshape(-1,2)
+  temp_face = np.append(temp_face, [landmark[40][0],landmark[40][1]]).reshape(-1,2)
+  jawline = np.append(jawline, [landmark[0][0], landmark[0][1] ]).reshape(-1, 2)
+  temp_face = np.append(temp_face, [landmark[0][0], landmark[40][1]]).reshape(-1,2)
+  contours = [jawline]
+  temp_contours = [temp_face]
+
+  # generate mask
+  mask = np.ones((h,w,1), np.uint8) * 255 # times 255 to make mask 'showable'
+  
+  #cv2.drawContours(mask, contours, -1, 0, -1) # remove below jawline
+  cv2.drawContours(mask, temp_contours, -1,0,-1)
+  
+
+  # apply to image
+  result = cv2.bitwise_and(img, img, mask = mask)
+
+  b,g,r = img[landmark[27][1],landmark[27][0]]
+  result = result[nose:bottom, side1:side2] # crop ROI
+  return result
+
+
+
+def coloring(img, img2, landmark_1, landmark_2):
+  x1_img1 = int(landmark_1[0][0] + landmark_1[36][0] / 2)
+  y1_img1 = landmark_1[36][1]
+  x1_img2 = int(landmark_2[0][0] + landmark_2[36][0] / 2)
+  y1_img2 = landmark_2[36][1]
+
+  x2_img1 = int((landmark_1[39][0] + landmark_1[27][0]) / 2)
+  y2_img1 = landmark_1[27][1]
+  x2_img2 = int((landmark_2[39][0] + landmark_2[27][0]) / 2)
+  y2_img2 = landmark_2[27][1]
+
+  x3_img1 = int((landmark_1[27][0] + landmark_1[42][0]) / 2)
+  y3_img1 = landmark_1[27][1]
+  x3_img2 = int((landmark_2[27][0] + landmark_2[42][0]) / 2)
+  y3_img2 = landmark_2[27][1]
+
+  x4_img1 = int((landmark_1[45][0] + landmark_1[16][0]) / 2)
+  y4_img1 = landmark_1[45][1]
+  x4_img2 = int((landmark_2[45][0] + landmark_2[16][0]) / 2)
+  y4_img2 = landmark_2[45][1]
+
+  b_1,g_1,r_1 = img[x1_img1][y1_img1]
+  b_2,g_2,r_2 = img[x2_img1][y2_img1]
+  b_3,g_3,r_3 = img[x3_img1][y3_img1]
+  b_4,g_4,r_4 = img[x4_img1][y4_img1]
+  b = (b_1+b_2+b_3+b_4)/4
+  g = (g_1+g_2+g_3+g_4)/4
+  r = (r_1+r_2+r_3+r_4)/4
+  #print(b,g,r)
+
+  b2_1,g2_1,r2_1 = img2[x1_img2][y1_img2]
+  b2_2,g2_2,r2_2 = img2[x2_img2][y2_img2]
+  b2_3,g2_3,r2_3 = img2[x3_img2][y3_img2]
+  b2_4,g2_4,r2_4 = img2[x4_img2][y4_img2]
+  b2 = (b2_1+b2_2+b2_3+b2_4)/4
+  g2 = (g2_1+g2_2+g2_3+g2_4)/4
+  r2 = (r2_1+r2_2+r2_3+r2_4)/4
+  #print(b2,g2,r2)
+
+  blue = int(b-b2)
+  green = int(g-g2)
+  red = int(r-r2)
+
+  val = min(abs(red), abs(green), abs(blue))
+  if(val == -red or val == -blue or val == -green):
+    val = val * -1
+  
+  if(val>0):    
+    array = np.full(img2.shape, (val, val, val), dtype = np.uint8)
+    img2 = cv2.add(img2, array)
+  else:
+    array = np.full(img2.shape, (-val, -val, -val), dtype = np.uint8)
+    img2 = cv2.subtract(img2, array)
+  return img2
+
+def rotate(img,p1,p2,p3,p4):
+  w,h = img.shape[:2]
+
+  tan1 = math.atan2(p1[1]-p2[1],p1[0]-p2[0])
+  res1 = tan1 * 180 / math.pi
+
+  tan2 = math.atan2(p3[1]-p4[1],p3[0]-p4[0])
+  res2 = tan2 * 180 / math.pi
+
+  if(res1<0): #오른쪽으로 돌아간 사진
+    handle = "right"
+  else:
+    handle = "left"
+  #cp = (img.shape[1]/2, img.shape[0]/2)
+  if(handle == "right"):
+    rot = cv2.getRotationMatrix2D((0,0), res2-res1,1)
+  else:
+    rot = cv2.getRotationMatrix2D((w,0), res2-res1,1)
+  img = cv2.warpAffine(img, rot, (0, 0)) 
+  return img, handle
+
+    
+# 두 이미지 합하기, img_mask : 마스크부분만 자른 이미지, img : 마스크낀 이미지 landmark_1 : 마스크를 낀 사진의 landmark, landmark2 : 마스크를 안낀 사진의 landmark
+def func(hpos, vpos, img_mask, img, landmark_1, landmark_2, handle):
+  x1 = landmark_1[0][0] - landmark_1[16][0]
+  y1 = landmark_1[0][1] - landmark_1[16][1]
+  c = math.sqrt((x1**2)+(y1**2))
+
+  x2 = landmark_2[0][0] - landmark_2[16][0]
+  y2 = landmark_2[0][1] - landmark_2[16][1]
+  c2 = math.sqrt((x2**2)+(y2**2))
+  size_w = c/c2
+
+  x3 = landmark_1[27][0] - landmark_1[8][0]
+  y3 = landmark_1[27][1] - landmark_1[8][1]
+  c3 = math.sqrt((x3**2)+(y3**2))
+
+  x4 = landmark_2[27][0] - landmark_2[8][0]
+  y4 = landmark_2[27][1] - landmark_2[8][1]
+  c4 = math.sqrt((x4**2)+(y4**2))
+  size_h = c3/c4
+  
+  src = img_mask
+  #cv2_imshow(src)
+  src = cv2.resize(src, dsize=(0,0), fx =size_w, fy= size_h, interpolation = cv2.INTER_LINEAR)
+  rows, cols, channels = src.shape
+  if handle=="right":
+    roi = img[hpos:rows+hpos,vpos:cols+vpos]
+  else:
+    roi = img[hpos:rows+hpos,vpos-cols:vpos]
+  
+  background = np.ones((rows,cols,3), np.uint8)*0
+  gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+  ret, mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY)
+  mask_inv = cv2.bitwise_not(mask)
+
+  src_s = cv2.resize(src, dsize=(0,0), fx = 0.985, fy = 0.985, interpolation = cv2.INTER_LINEAR)
+  row2, col2, ch2 = src_s.shape
+  y = (int)((rows - row2)/2)
+  x = (int)((cols -col2)/2)
+  background[y:y+row2, x:x+col2] = src_s
+
+  gray_s = cv2.cvtColor(background, cv2.COLOR_BGR2GRAY)
+  r, mask_s = cv2.threshold(gray_s, 0, 255, cv2.THRESH_BINARY)
+  mask_inv = cv2.bitwise_not(mask_s)
+
+  
+  img_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
+  src_fg = cv2.bitwise_and(src, src, mask=mask_s)
+  tmp = cv2.addWeighted(img_bg, 1, src_fg, 1,0)
+  tmp = cv2.medianBlur(tmp,7)
+  if handle == "right":
+    img[hpos:rows+hpos, vpos:cols+vpos] = tmp
+  else:
+    img[hpos:rows+hpos, vpos-cols:vpos] = tmp
+  return img, tmp
+
+
+def output(img, detector):
+    image = img
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    rects = detector(gray, 1)
+    for i in rects:
+        x1 = i.left()
+        x2 = i.right()
+        y1 = i.top()
+        y2 = i.bottom()
+    tmp = image[y1:y2, x1:x2]
+    tmp = cv2.resize(tmp, dsize=(800, 800), interpolation=cv2.INTER_AREA)
+    #cv2_imshow(tmp)
+    list_xy = [x1,x2,y1,y2]
+    return tmp,list_xy
+
+
+#2차 합성
+def replace(img, eimg,list_ab):
+  h1, w1, ch1 = eimg.shape
+  h = (list_ab[3]-list_ab[2])/h1
+  w = (list_ab[1]-list_ab[0])/w1
+  eimg = cv2.resize(eimg, dsize=(0,0),fx=w,fy=h, interpolation = cv2.INTER_LINEAR)
+  #cv2_imshow(eimg)
+  img[list_ab[2]:list_ab[3], list_ab[0]:list_ab[1]] = eimg
+  return img
+
+
+def main():
+    detector = dlib.get_frontal_face_detector()
+    pred = "shape_predictor_68_face_landmarks.dat"
+    predictor = dlib.shape_predictor(pred)
+
+    img_path = "mask.jpg"  #마스크 낀 사진
+    image = cv2.imread(img_path)
+    #cv2_imshow(image)
+
+    img_path2 = "original.png"  #마스크 안낀 사진
+    image2 = cv2.imread(img_path2)
+
+    landmark1 = np.empty((68,2),int)
+    landmark2 = np.empty((68,2),int)
+
+    landmark1 = faceDetection(image, detector, predictor)
+    landmark2 = faceDetection(image2, detector, predictor)
+
+    image2 = coloring(image,image2,landmark1,landmark2)
+    show_mask = extractMask(landmark2, image2)
+    show_mask,r = rotate(show_mask, landmark1[36],landmark1[45],landmark2[36], landmark2[45])
+
+    if(r == "right"):
+      merged_img, show_mask = func(landmark1[40][1],landmark1[0][0], show_mask, image, landmark1, landmark2, r)
+    else:
+      merged_img, show_mask = func(landmark1[40][1],landmark1[16][0], show_mask, image, landmark1, landmark2, r)
+
+    face_img, xy_list = output(merged_img)
+    cv2.imwrite("faceimg.png",face_img)
+
+    img_encoded = cv2.imread("encode.jpg")
+    merged_img = replace(merged_img, img_encoded, xy_list)
+    cv2.imwrite("result.png",merged_img)
+
+if __name__ == '__main__':
+    main()
