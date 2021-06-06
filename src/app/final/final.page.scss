@@ -1,0 +1,45 @@
+*{margin:0; padding: 0;}
+#all{
+    text-align: center;
+    margin: 0 auto;
+    width: 70%;
+}
+#container {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30%;
+    transform: translateY(-50%);
+  }
+  
+  #container strong {
+    font-size: 30px;
+    line-height: 26px;
+    color :black;
+  }
+  
+  #container p {
+    font-size: 16px;
+    line-height: 22px;
+    color: rgb(10, 25, 92);
+    margin:0;
+  }
+
+  #img_result{
+    position: absolute;
+    width:70%;
+    height: 40%;
+    top: 55%;
+    text-align: center;
+    transform: translateY(-50%);
+  }
+  #btn{
+    width: 70%;
+    position: absolute;
+    top: 80%;
+    text-align: center;
+    transform: translateY(-50%);
+  }
+  

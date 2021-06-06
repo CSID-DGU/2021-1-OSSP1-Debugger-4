@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  $(window).load()
+  <ion-toolbar>
+    <ion-title>
+      <b>FaceMaskSynthesis</b>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<link rel="stylesheet" href="loading.page.scss">
+<ion-content [fullscreen]="true" style = "background-color: white">
+  <div id="container">
+    <div id="loading_animate">
+      <div id="loading_message">
+        <p>Loading...</p>
+        <p>Synthesizing images</p>
+        
+      </div>
+    </div>  
+  </div>
+  <ion-button color="primary"  (click)="navigateToFinal()">Start Synthesis!</ion-button>
+</ion-content>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    alert("aaa");
+  });
+  window.onload=function() {
+    alert("ing2");
+    test();
+  }
+  </script>
+

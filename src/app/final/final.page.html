@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <b>FaceMaskSynthesis</b>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" style = "background-color: white">
+
+  
+  <div id="container">
+    <strong>Result</strong>
+    <br><Br>
+    </div>
+    <div id="img_result" >
+      <img id="img" srs = "resultFile()"/>
+
+    </div>
+
+    <div id="btn">
+      <ion-button (click)="downLoadImg()"> download image </ion-button>
+      <ion-button (click)="navigateToHome()"> return to Home </ion-button>
+    </div>
+</ion-content>

@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <b>FaceMaskSynthesis</b>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<link rel="stylesheet" href="home.page.scss">
+
+<ion-content [fullscreen]="true" style = "background-color: white">
+
+  <ion-header collapse="condense">
+
+    <ion-toolbar>
+
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <br><br><br><br><br>
+    <strong>Welcome to FMS!</strong>
+    <p ><b>2021 DGU OSSP Debugger-4</b></p>
+    <br>
+    <br><br>
+    <p><b>1. Upload images wearing a mask</b></p>
+    <br>
+    <input type="file" (change)="onFileChange($event)" />
+    <br>
+    <br>
+    <br>
+    <p><b> 2. Upload front face video</b> </p>
+    <br>
+    <input type="file" (change)="onFile2Change($event)" />
+    <br><br><br>
+    <ion-button color="primary"  (click)="navigateToLoading()">Start Synthesis!</ion-button>
+    <br>
+    <br>
+    <br><br><br>
+
+
+
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/CSID-DGU/2021-1-OSSP1-Debugger-4"
+    style ="color : blue">github</a>
+  </div>
+
+</ion-content>
+
+
+
+
+
