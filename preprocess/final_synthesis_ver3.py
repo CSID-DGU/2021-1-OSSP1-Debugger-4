@@ -78,8 +78,8 @@ def extractMask(landmark, img):
 
 
 def coloring(img, img2):
-  img_c = cv2.cvtColor(face_img, cv2.COLOR_BGR2HSV)  
-  img2_c = cv2.cvtColor(result, cv2.COLOR_BGR2HSV)
+  img_c = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  
+  img2_c = cv2.cvtColor(img2, cv2.COLOR_BGR2HSV)
 
   lower = np.array([0,48,80], dtype = "uint8")
   upper = np.array([20,255,255], dtype = "uint8")
