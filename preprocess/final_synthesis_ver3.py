@@ -77,59 +77,77 @@ def extractMask(landmark, img):
 
 
 
-def coloring(img, img2, landmark_1, landmark_2):
-  x1_img1 = int(landmark_1[0][0] + landmark_1[36][0] / 2)
-  y1_img1 = landmark_1[36][1]
-  x1_img2 = int(landmark_2[0][0] + landmark_2[36][0] / 2)
-  y1_img2 = landmark_2[36][1]
+def coloring(img, img2):
+  img_c = cv2.cvtColor(face_img, cv2.COLOR_BGR2HSV)  
+  img2_c = cv2.cvtColor(result, cv2.COLOR_BGR2HSV)
 
-  x2_img1 = int((landmark_1[39][0] + landmark_1[27][0]) / 2)
-  y2_img1 = landmark_1[27][1]
-  x2_img2 = int((landmark_2[39][0] + landmark_2[27][0]) / 2)
-  y2_img2 = landmark_2[27][1]
+  lower = np.array([0,48,80], dtype = "uint8")
+  upper = np.array([20,255,255], dtype = "uint8")
+  skin_msk = cv2.inRange(img_c, lower, upper)	
+  skin_msk2 = cv2.inRange(img2_c, lower, upper)
+  skin1 = cv2.bitwise_and(img, img, mask = skin_msk)
+  skin2 = cv2.bitwise_and(img2, img2, mask = skin_msk2)
 
-  x3_img1 = int((landmark_1[27][0] + landmark_1[42][0]) / 2)
-  y3_img1 = landmark_1[27][1]
-  x3_img2 = int((landmark_2[27][0] + landmark_2[42][0]) / 2)
-  y3_img2 = landmark_2[27][1]
+  height, width, channel = skin1.shape
+  tmp = 0
+  black = 0
+  b1 = 0
+  g1 = 0
+  r1 = 0
 
-  x4_img1 = int((landmark_1[45][0] + landmark_1[16][0]) / 2)
-  y4_img1 = landmark_1[45][1]
-  x4_img2 = int((landmark_2[45][0] + landmark_2[16][0]) / 2)
-  y4_img2 = landmark_2[45][1]
+  for y in range(0, height):
+    for x in range(0, width):
+      b = skin1.item(y,x,0)
+      g = skin1.item(y,x,1)
+      r = skin1.item(y,x,2)
 
-  b_1,g_1,r_1 = img[x1_img1][y1_img1]
-  b_2,g_2,r_2 = img[x2_img1][y2_img1]
-  b_3,g_3,r_3 = img[x3_img1][y3_img1]
-  b_4,g_4,r_4 = img[x4_img1][y4_img1]
-  b = (b_1+b_2+b_3+b_4)/4
-  g = (g_1+g_2+g_3+g_4)/4
-  r = (r_1+r_2+r_3+r_4)/4
-  #print(b,g,r)
+      if(b == 0 and g == 0 and r==0):
+        black +=1
+      else:
+        tmp +=1
+      b1 = b1+ b
+      g1 = g1+ g
+      r1 = r1+ r
 
-  b2_1,g2_1,r2_1 = img2[x1_img2][y1_img2]
-  b2_2,g2_2,r2_2 = img2[x2_img2][y2_img2]
-  b2_3,g2_3,r2_3 = img2[x3_img2][y3_img2]
-  b2_4,g2_4,r2_4 = img2[x4_img2][y4_img2]
-  b2 = (b2_1+b2_2+b2_3+b2_4)/4
-  g2 = (g2_1+g2_2+g2_3+g2_4)/4
-  r2 = (r2_1+r2_2+r2_3+r2_4)/4
-  #print(b2,g2,r2)
+  height2, width2, channel2 = skin2.shape
+  tmp2 = 0
+  black = 0
+  b2 = 0
+  g2 = 0
+  r2 = 0
 
-  blue = int(b-b2)
-  green = int(g-g2)
-  red = int(r-r2)
+  for y in range(0, height2):
+    for x in range(0, width2):
+      b = skin2.item(y,x,0)
+      g = skin2.item(y,x,1)
+      r = skin2.item(y,x,2)
 
-  val = min(abs(red), abs(green), abs(blue))
-  if(val == -red or val == -blue or val == -green):
-    val = val * -1
+      if(b == 0 and g == 0 and r==0):
+         black +=1
+      else:
+          tmp2 +=1
+      b2 = b2+ b
+      g2 = g2+ g
+      r2 = r2+ r
+
+
+  b1 = b1/tmp
+  g1 = g1/tmp
+  r1 = r1/tmp
+  b2 = b2/tmp2
+  r2 = r2/tmp2
+  g2 = g2/tmp2
+
+  b_gap = b1-b2
+  g_gap = g1-g2
+  r_gap = r1-r2
   
-  if(val>0):    
-    array = np.full(img2.shape, (val, val, val), dtype = np.uint8)
-    img2 = cv2.add(img2, array)
+  M = np.ones(skin2.shape, dtype = "uint8") * (int)(min(abs(b_gap), abs(g_gap), abs(r_gap)))
+  
+  if min(b_gap, g_gap, r_gap)<0:
+    img2 = cv2.subtract(img2, M)
   else:
-    array = np.full(img2.shape, (-val, -val, -val), dtype = np.uint8)
-    img2 = cv2.subtract(img2, array)
+    img2 = cv2.add(img2, M)
   return img2
 
 def rotate(img,p1,p2,p3,p4):
@@ -255,7 +273,7 @@ def main():
     landmark1 = faceDetection(image, detector, predictor)
     landmark2 = faceDetection(image2, detector, predictor)
 
-    image2 = coloring(image,image2,landmark1,landmark2)
+    image2 = coloring(image,image2)
     show_mask = extractMask(landmark2, image2)
     show_mask,r = rotate(show_mask, landmark1[36],landmark1[45],landmark2[36], landmark2[45])
 
