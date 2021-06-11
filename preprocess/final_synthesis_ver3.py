@@ -144,7 +144,7 @@ def coloring(img, img2):
   
   M = np.ones(skin2.shape, dtype = "uint8") * (int)(min(abs(b_gap), abs(g_gap), abs(r_gap)))
   
-  if min(b_gap, g_gap, r_gap)<0:
+  if b_gap+g_gap+r_gap <0:
     img2 = cv2.subtract(img2, M)
   else:
     img2 = cv2.add(img2, M)
