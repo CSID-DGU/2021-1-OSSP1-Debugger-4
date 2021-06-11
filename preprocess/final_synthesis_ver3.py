@@ -40,25 +40,15 @@ def extractMask(landmark, img):
   temp_face = np.insert(temp_face,0,[landmark[0][0],landmark[40][1]]).reshape(-1,2)
   temp_face = np.append(temp_face,[landmark[16][0],landmark[47][1]]).reshape(-1,2)
   # extend contour for masking
-  jawline = np.append(jawline, [landmark[47][0],landmark[47][1]]).reshape(-1,2)
   temp_face = np.append(temp_face, [landmark[47][0],landmark[47][1]]).reshape(-1,2)
-  jawline = np.append(jawline, [landmark[27][0],landmark[27][1]]).reshape(-1,2)
   temp_face = np.append(temp_face, [landmark[27][0],landmark[27][1]]).reshape(-1,2)
-  jawline = np.append(jawline, [ w-1, nose]).reshape(-1,2)
   temp_face = np.append(temp_face, [w-1,nose]).reshape(-1,2)
-  jawline = np.append(jawline, [ w-1, h-1 ]).reshape(-1, 2)
   temp_face = np.append(temp_face,[w-1,h-1]).reshape(-1,2)
-  jawline = np.append(jawline, [ 0, h-1 ]).reshape(-1, 2)
   temp_face = np.append(temp_face,[0,h-1]).reshape(-1,2)
-  jawline = np.append(jawline, [0, nose]).reshape(-1,2)
   temp_face = np.append(temp_face,[0,nose]).reshape(-1,2)
-  jawline = np.append(jawline, [landmark[27][0],landmark[27][1]]).reshape(-1,2)
   temp_face = np.append(temp_face,[landmark[27][0],landmark[27][1]]).reshape(-1,2)
-  jawline = np.append(jawline, [landmark[40][0],landmark[40][1]]).reshape(-1,2)
   temp_face = np.append(temp_face, [landmark[40][0],landmark[40][1]]).reshape(-1,2)
-  jawline = np.append(jawline, [landmark[0][0], landmark[0][1] ]).reshape(-1, 2)
   temp_face = np.append(temp_face, [landmark[0][0], landmark[40][1]]).reshape(-1,2)
-  contours = [jawline]
   temp_contours = [temp_face]
 
   # generate mask
