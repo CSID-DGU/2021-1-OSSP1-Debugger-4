@@ -18,3 +18,7 @@
 - CUDA 11.2
 - OpenCV 4.5.2
 - Jupyter Notebook
+
+## 실행 전 파일 추가
+http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 다음 링크를 이용하여 파일의 압축을 푼 후, <br>
+main폴더의 preprocess에 추가한 뒤 다음 프로그램을 진행한다.
