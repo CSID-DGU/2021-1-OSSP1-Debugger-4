@@ -1,44 +1,49 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from "@angular/common/http";
-
-
 import { HomePage } from '../home/home.page';
-import * as _ from 'lodash';
+import { HttpClient } from '@angular/common/http';
+import { FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import {FileTransfer} from '@ionic-native/file-transfer/ngx';
+
+//import * as _ from 'lodash';
+//import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 @Component({
   selector: 'app-final',
   templateUrl: './final.page.html',
   styleUrls: ['./final.page.scss'],
 })
+
 export class FinalPage implements OnInit {
-  private file:File;
+  fileTransfer: FileTransferObject = this.transfer.create();
+  file;
+  private http: HttpClient;
 
   constructor(
-    //private http: HttpClient,
-    private router: Router,
+    private transfer: FileTransfer,
+    private router : Router,
   ) { }
 
-  ngOnInit() {
-    // Simple GET request with response type <any>
-    //this.http.get('http://210.94.194.107:3000/upload"').subscribe(data => {
-    //   this.resultFile = data;  }
+ 
+  ngOnInit() { 
+    /*this.http.get('http://210.94.194.107:3000/')///final_800.png
+    .subscribe({ next: data => { 
+      const url = this.http.get("http://210.94.194.107:3000/upload").subscribe(
+        (response) => {console.log(response); });
+      this.transfer.download(url, "result.png").then((entry) => {
+        console.log('download complete: ' + entry.toURL());  // I always enter here.
+      }, (error) => {
+        // handle error
+        console.log("error!"); 
+      });
+    }
+    });*/
   }
+
 
   navigateToHome(){
     console.log("navigateToHome");
     this.router.navigate(['home']);
   }
   
-  receiveFile(PR){
-
-    let formData = new FormData();
-    formData.append("file[]", this.file, this.file.name);
-    //this.http.post("http://localhost:8100/home", formData).subscribe((response) => {
-    //  console.log(response);
-    //});
-  }
-  downLoadImg(){
-    
-  }
 }

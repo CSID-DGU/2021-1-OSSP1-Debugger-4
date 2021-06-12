@@ -1,5 +1,15 @@
+<script language=typescript>
+  $(document).ready(progress());
+
+  function progress(){
+    this.http.get('http://210.94.194.107:3000/upload/result.jpg', {id: '12',message: 'test'}, function(response) {
+      console.log(response.status); }, function(response) {console.error(response.error);});           
+    navigateToFinal();
+  }
+
+</script>
+
 <ion-header [translucent]="true">
-  $(window).load()
   <ion-toolbar>
     <ion-title>
       <b>FaceMaskSynthesis</b>
@@ -10,23 +20,18 @@
 <ion-content [fullscreen]="true" style = "background-color: white">
   <div id="container">
     <div id="loading_animate">
-      <div id="loading_message">
+      <div id="loading_message" href ="navigateToFinal()">
         <p>Loading...</p>
         <p>Synthesizing images</p>
-        
       </div>
     </div>  
   </div>
-  <ion-button color="primary"  (click)="navigateToFinal()">Start Synthesis!</ion-button>
+
+  <div id=bt>
+    <ion-button color="primary"  (click)="go()">Synthesis complete!</ion-button>
+  </div>
 </ion-content>
 
-<script type="text/javascript">
-  $(document).ready(function() {
-    alert("aaa");
-  });
-  window.onload=function() {
-    alert("ing2");
-    test();
-  }
-  </script>
+
+
 

@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { LoadingPageRoutingModule } from './loading-routing.module';
 import { LoadingPage } from './loading.page';
+
 import {FileTransfer} from
 '@ionic-native/file-transfer/ngx';
 import {FileChooser} from '@ionic-native/file-chooser/ngx';
