@@ -10,4 +10,11 @@
 - 이원정
 - 임준엽
 
-
+## 개발 환경
+- Python 3.7.10
+- Tensorflow 2.4.1
+- Ubuntu 18.04.5 LTS
+- Anaconda 4.10.1
+- CUDA 11.2
+- OpenCV 4.5.2
+- Jupyter Notebook
