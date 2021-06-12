@@ -22,3 +22,9 @@
 ## 실행 전 파일 추가
 http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 다음 링크를 이용하여 파일의 압축을 푼 후, <br>
 main폴더의 preprocess에 추가한 뒤 다음 프로그램을 진행한다.
+
+
+## Input Data 준비
+해당 어플을 실행시키고 나면, 두 개의 Input Data가 필요하다. <br>
+첫 번째로, 정면으로 보고 있는 마스크를 낀 사진이 필요하다. <br>
+두 번째로, 정면에서 시작한 5초 정도의 영상이 필요하다. <img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif">
