@@ -5,8 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 
 import { LoadingPageRoutingModule } from './loading-routing.module';
-
 import { LoadingPage } from './loading.page';
+
+import {FileTransfer} from
+'@ionic-native/file-transfer/ngx';
+import {FileChooser} from '@ionic-native/file-chooser/ngx';
+import {FilePath} from '@ionic-native/file-path/ngx';
+import {File} from '@ionic-native/file/ngx';
 
 @NgModule({
   imports: [
@@ -16,6 +21,12 @@ import { LoadingPage } from './loading.page';
     LoadingPageRoutingModule,
     HttpClientModule
   ],
-  declarations: [LoadingPage]
+  declarations: [LoadingPage],
+  providers:[
+    FileTransfer,
+    FileChooser,
+    FilePath,
+    File
+  ]
 })
 export class LoadingPageModule {}

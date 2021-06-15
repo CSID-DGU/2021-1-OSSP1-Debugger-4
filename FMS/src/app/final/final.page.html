@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <b>FaceMaskSynthesis</b>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<script src="./assert/final_800.png">
+
+</script>
+<ion-content [fullscreen]="true" style = "background-color: white">
+
+  <div id="container">
+    <strong>Result</strong>
+    <br><Br>
+  </div>
+
+
+  <div id="img_result" >
+    <img id="img" src = "http://210.94.194.107:3001/image"/>
+  </div>
+
+  <div id="btn">
+    <div id="bt1">
+      <a download="http://210.94.194.107:3001/image" href="http://210.94.194.107:3001/image" title="ImageName"><ion-button>download image</ion-button></a><br>
+    </div>
+    <div id="bt2">
+      <ion-button (click)="navigateToHome()"> return to Home </ion-button>
+    </div>
+  </div>
+
+</ion-content>

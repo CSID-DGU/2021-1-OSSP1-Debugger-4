@@ -1,45 +1,68 @@
 import { Component } from '@angular/core';
-import { LoadingPage } from '../loading/loading.page';
 import { Router } from '@angular/router';
 import { HttpClient } from "@angular/common/http";
+import { LoadingPage } from '../loading/loading.page';
+import { FinalPage } from '../final/final.page';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-
 })
 
 export class HomePage {
 private file: File;
 private file2: File;
-  constructor(private http: HttpClient,private router: Router)
-  {}
+  constructor(
+    private http: HttpClient,
+    private router: Router)
+  {
 
-  go() {
+  }
+
+
+  navigateToLoading(){
 
     this.router.navigate(['loading']);
   }
 
-    onFileChange(fileChangeEvent) {
-      this.file = fileChangeEvent.target.files[0];
+  navigateToFinal(){
+
+      this.router.navigate(['final']);
     }
-    onFile2Change(fileChangeEvent){
-      this.file2 = fileChangeEvent.target.files[0];
-    }
+
+  onFileChange(fileChangeEvent) {
+    this.file = fileChangeEvent.target.files[0];
+  }
+  onFile2Change(fileChangeEvent){
+    this.file2 = fileChangeEvent.target.files[0];
+  }
+
+
+
+/*this.http.post("http://210.94.194.107:3001/",
+                      data).toPromise().subscribe((response) => {
+
+                     });*/
+        async getData(data){
+        await this.http.post("http://210.94.194.107:3001/",data).toPromise().then()
+        //this.router.navigate(['/final']);
+        window.location.href = 'http://localhost:8100/final';
+        };
 
     async submitForm() {
-      let formData = new FormData();
-      formData.append("file[]", this.file, this.file.name);
-      formData.append("file[]",this.file2,this.file2.name);
+    this.router.navigate(['/loading']);
 
-      this.http.post("http://210.94.194.107:3000/upload", formData).subscribe((response) => {
-        console.log(response);
+    let formData = new FormData();
+    formData.append("file[]", this.file, "images.jpg");
+    formData.append("file[]",this.file2,"video.mp4");
+    await this.getData(formData);
 
 
-      });
-      this.go();
-    }
+
+
+     }
+
 }
 
 
