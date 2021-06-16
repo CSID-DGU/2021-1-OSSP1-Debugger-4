@@ -1,3 +1,14 @@
+<script language=typescript>
+  $(document).ready(progress());
+
+  function progress(){
+    this.http.get('http://210.94.194.107:3000/upload/result.jpg', {id: '12',message: 'test'}, function(response) {
+      console.log(response.status); }, function(response) {console.error(response.error);});           
+    navigateToFinal();
+  }
+
+</script>
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -5,25 +16,19 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-
+<link rel="stylesheet" href="loading.page.scss">
 <ion-content [fullscreen]="true" style = "background-color: white">
-
   <div id="container">
-    <strong>Result</strong>
-    <br><Br>
-  </div>
-
-  <div id="img_result" >
-    <img id="img" src = "http://210.94.194.107:3001/image"/>
-  </div>
-
-  <div id="btn">
-    <div id="bt1">
-      <a download="http://210.94.194.107:3001/image" href="http://210.94.194.107:3001/image" title="ImageName"><ion-button>download image</ion-button></a><br>
-    </div>
-    <div id="bt2">
-      <ion-button (click)="navigateToHome()"> return to Home </ion-button>
-    </div>
+    <div id="loading_animate">
+      <div id="loading_message" href ="navigateToFinal()">
+        <p>Loading...</p>
+        <p>Synthesizing images</p>
+      </div>
+    </div>  
   </div>
 
 </ion-content>
+
+
+
+
