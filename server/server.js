@@ -7,7 +7,6 @@ var http = require('http');
 const app = express();
 const util = require('util');
 require('util.promisify').shim();
-
 const fs = require('fs');
 const readFileAsync = util.promisify(fs.readFile);
 
@@ -28,12 +27,15 @@ app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/image",function(req,res){
-res.sendFile('/home/plass-sukhyun/2021-1-OSSP1-Debugger-4/preprocess/result.png');
+app.get("/image",function(req,res)
+{
+    res.sendFile('/home/plass-sukhyun/2021-1-OSSP1-Debugger-4/preprocess/result.png');
 });
 
 app.post("/", upload.array("file[]"), function(req, res)  {
+  req.setTimeout(60000000000);
   console.log(req.files);
+
 var {PythonShell} = require('python-shell');
 var options = {
 
@@ -43,21 +45,19 @@ var options = {
   scriptPath: '',
 
 };
-let pyshell = new PythonShell('../2021-1-OSSP1-Debugger-4/facesynthesis.py', options) // Options 설정 가능
 
+let pyshell = new PythonShell('../2021-1-OSSP1-Debugger-4/facesynthesis.py', options)
 pyshell.end((err, code, signal) => {
 	if(err) throw err;
-  	console.log('The exit signal was: ' + signal);
-  	console.log('finished');
   	res.end();
 });
 
 });
 
-const port = process.env.PORT || 3001;
 
+const port = process.env.PORT || 3001;
 app.listen(port, () =>{
-	console.log("Upload Server running on 3000...");
+	console.log("Upload Server running on 3001...");
 });
 
 

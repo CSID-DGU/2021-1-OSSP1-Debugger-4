@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from "@angular/common/http";
 import { LoadingPage } from '../loading/loading.page';
-import { FinalPage } from '../final/final.page';
+import { timeout,} from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -17,19 +17,10 @@ private file2: File;
     private http: HttpClient,
     private router: Router)
   {
-
   }
-
-
   navigateToLoading(){
-
     this.router.navigate(['loading']);
   }
-
-  navigateToFinal(){
-
-      this.router.navigate(['final']);
-    }
 
   onFileChange(fileChangeEvent) {
     this.file = fileChangeEvent.target.files[0];
@@ -38,30 +29,22 @@ private file2: File;
     this.file2 = fileChangeEvent.target.files[0];
   }
 
+    async getData(data)
+    {
+      //Server를 Local에서 실행 시, http://210.94.194.107:3001/를 http://localhost:3001/ 로 변경.
 
+      await this.http.post("http://210.94.194.107:3001/",data).pipe(timeout(100000000)).toPromise();
+      window.location.href = 'http://localhost:8100/final';
+    };
 
-/*this.http.post("http://210.94.194.107:3001/",
-                      data).toPromise().subscribe((response) => {
-
-                     });*/
-        async getData(data){
-        await this.http.post("http://210.94.194.107:3001/",data).toPromise().then()
-        //this.router.navigate(['/final']);
-        window.location.href = 'http://localhost:8100/final';
-        };
-
-    async submitForm() {
-    this.router.navigate(['/loading']);
-
-    let formData = new FormData();
-    formData.append("file[]", this.file, "images.jpg");
-    formData.append("file[]",this.file2,"video.mp4");
-    await this.getData(formData);
-
-
-
-
-     }
+    async submitForm()
+    {
+      this.router.navigate(['/loading']);
+      let formData = new FormData();
+      formData.append("file[]", this.file, "images.jpg");
+      formData.append("file[]",this.file2,"video.mp4");
+      await this.getData(formData);
+    }
 
 }
 

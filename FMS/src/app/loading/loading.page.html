@@ -1,14 +1,3 @@
-<script language=typescript>
-  $(document).ready(progress());
-
-  function progress(){
-    this.http.get('http://210.94.194.107:3000/upload/result.jpg', {id: '12',message: 'test'}, function(response) {
-      console.log(response.status); }, function(response) {console.error(response.error);});           
-    navigateToFinal();
-  }
-
-</script>
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -24,11 +13,7 @@
         <p>Loading...</p>
         <p>Synthesizing images</p>
       </div>
-    </div>  
-  </div>
-
-  <div id=bt>
-    <ion-button color="primary"  (click)="go()">Synthesis complete!</ion-button>
+    </div>
   </div>
 </ion-content>
 

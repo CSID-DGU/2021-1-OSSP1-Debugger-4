@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mime": "^2.5.2",
-    "python-shell": "^3.0.0"
+    "asyncawait": "^3.0.0"
   }
 }
