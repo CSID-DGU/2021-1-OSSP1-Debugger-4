@@ -55,7 +55,7 @@ $ ionic serve //Local에서 실행.
 
 
 ## 애플리케이션 구성도
-<img src = "https://user-images.githubusercontent.com/71958885/122260136-e0531d80-cf0d-11eb-9ae8-6b3a7ae25fe6.PNG"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122260136-e0531d80-cf0d-11eb-9ae8-6b3a7ae25fe6.PNG" width = "60%" height = "60%"><br><br><br>
 
 
 ## Model Structure
