@@ -62,7 +62,7 @@ $ ionic serve //Local에서 실행.
 <img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif"><br><br><br>
 
 ## 데모영상
-<img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122260531-59eb0b80-cf0e-11eb-96cf-a4c93c0828ff.gif"><br><br><br>
 
 ## 문의
 ```
