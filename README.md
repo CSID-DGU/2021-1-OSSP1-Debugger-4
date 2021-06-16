@@ -30,9 +30,9 @@
 ### 1. Input Data 준비
 해당 어플리케이션을 통해 합성된 결과물을 얻기 위해서 두 가지의 Input Data가 필요하다. <br><br>
 (1) 마스크를 착용한 채, 정면을 보고 있는 이미지 파일이 필요하다. <br><br>
-<img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122261491-6c197980-cf0f-11eb-9cfd-c6796c71facb.jpg"><br><br><br>
 (2) 정면에서 양 측면의 얼굴까지 천천히 회전시키며 보여주는, 약 5초 정도의 영상 파일이 필요하다.<br><br> 
-<img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif"><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122261382-4ee4ab00-cf0f-11eb-9391-7cb62ee91124.gif"><br><br>
 
 
 
