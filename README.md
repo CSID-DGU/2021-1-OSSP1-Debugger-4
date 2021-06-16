@@ -1,3 +1,4 @@
+![캡처1](https://user-images.githubusercontent.com/71958885/122259926-a5e98080-cf0d-11eb-9a54-224a04f6b70d.PNG)
 # 프로젝트 소개
 <b>Face-Mask-Synthesis System</b><br><br>
 이미지에서 마스크로 가려진 얼굴 부분을 본래의 얼굴로 채워주는 시스템 "FMS".<br><br>
@@ -55,7 +56,7 @@ $ ionic serve //Local에서 실행.
 
 
 ## 애플리케이션 구성도
-<img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122260136-e0531d80-cf0d-11eb-9ae8-6b3a7ae25fe6.PNG"><br><br><br>
 
 
 ## Model Structure
