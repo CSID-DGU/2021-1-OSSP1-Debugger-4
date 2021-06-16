@@ -40,13 +40,13 @@
 ```bash
 $ git clone https://github.com/CSID-DGU/2021-1-OSSP1-Debugger-4.git
 $ cd 2021-1-OSSP1-Debugger-4/FMS
-$ npm install --save-dev @angular-devkit/build-angular    //Node js 설치가 되어있어야함.
+$ npm install --save-dev @angular-devkit/build-angular       //Node js 설치가 되어있어야함.
 ```
 <br>
 
 ```bash
-$ npm install -g @ionic/cli     //ionic 설치
-$ ionic serve     //local에서 실행.
+$ npm install -g @ionic/cli       //ionic 설치
+$ ionic serve       //local에서 실행.
 ```
 <br>
 자체 서버에서 Model 을 두고 서비스 하기 때문에 서버 가동 중이 아닐 시, 정상 실행이 안될 수도 있음.
@@ -69,7 +69,7 @@ $ ionic serve     //local에서 실행.
 ```
 송민수 sooya233@dgu.ac.kr
 강영서 22019112024@gmail.com
-임준엽 dunebi1030123@gamil.com
+임준엽 dunebi1030123@gmail.com
 박민수 pms1139@gmail.com
 이원정 wonjung1015@dgu.ac.kr
 박교녕 rysud0125@dgu.ac.kr
