@@ -1,4 +1,3 @@
-![캡처1](https://user-images.githubusercontent.com/71958885/122259926-a5e98080-cf0d-11eb-9a54-224a04f6b70d.PNG)
 # 프로젝트 소개
 <b>Face-Mask-Synthesis System</b><br><br>
 이미지에서 마스크로 가려진 얼굴 부분을 본래의 얼굴로 채워주는 시스템 "FMS".<br><br>
