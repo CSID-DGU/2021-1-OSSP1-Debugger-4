@@ -30,7 +30,7 @@
 ### 1. Input Data 준비
 해당 어플리케이션을 통해 합성된 결과물을 얻기 위해서 두 가지의 Input Data가 필요하다. <br><br>
 (1) 마스크를 착용한 채, 정면을 보고 있는 이미지 파일이 필요하다. <br><br>
-<img src = "https://user-images.githubusercontent.com/71958885/122261491-6c197980-cf0f-11eb-9cfd-c6796c71facb.jpg"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122261491-6c197980-cf0f-11eb-9cfd-c6796c71facb.jpg" width = "60%" height = "60%"><br><br><br>
 (2) 정면에서 양 측면의 얼굴까지 천천히 회전시키며 보여주는, 약 5초 정도의 영상 파일이 필요하다.<br><br> 
 <img src = "https://user-images.githubusercontent.com/71958885/122261382-4ee4ab00-cf0f-11eb-9391-7cb62ee91124.gif"><br><br>
 
@@ -55,7 +55,7 @@ $ ionic serve //Local에서 실행.
 
 
 ## 애플리케이션 구성도
-<img src = "https://user-images.githubusercontent.com/71958885/122260136-e0531d80-cf0d-11eb-9ae8-6b3a7ae25fe6.PNG" width = "30%" height = "30%"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/71958885/122260136-e0531d80-cf0d-11eb-9ae8-6b3a7ae25fe6.PNG"><br><br><br>
 
 
 ## Model Structure
