@@ -59,7 +59,7 @@ $ ionic serve //Local에서 실행.
 
 
 ## Model Structure
-<img src = "https://im3.ezgif.com/tmp/ezgif-3-f04a7d8828a9.gif"><br><br><br>
+<img src = "https://user-images.githubusercontent.com/70196880/122268001-82770380-cf16-11eb-9e2b-0042c124db8e.png"><br><br><br>
 
 ## 데모영상
 <img src = "https://user-images.githubusercontent.com/71958885/122260531-59eb0b80-cf0e-11eb-96cf-a4c93c0828ff.gif"><br><br><br>
