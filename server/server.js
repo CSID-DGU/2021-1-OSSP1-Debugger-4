@@ -46,6 +46,7 @@ var options = {
 
 };
 
+//python child process 생성 
 let pyshell = new PythonShell('../2021-1-OSSP1-Debugger-4/facesynthesis.py', options)
 pyshell.end((err, code, signal) => {
 	if(err) throw err;
